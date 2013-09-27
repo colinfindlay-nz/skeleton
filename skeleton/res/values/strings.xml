@@ -3,5 +3,7 @@
 	<string name="app_name">skeleton</string>
 	<string name="hello_world">Hello world!</string>
 	<string name="menu_settings">Settings</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
 
 </resources>

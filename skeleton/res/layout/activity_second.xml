@@ -7,5 +7,5 @@
 
     <fragment android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:name="nz.geek.findlay.skeleton.ui.fragments.HomeFragment_" android:id="@+id/homeFragment"/>
+              android:name="nz.geek.findlay.skeleton.ui.fragments.SecondFragment_" android:id="@+id/secondFragment"/>
 </LinearLayout>

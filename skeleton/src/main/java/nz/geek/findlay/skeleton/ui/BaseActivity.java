@@ -1,32 +1,26 @@
 package nz.geek.findlay.skeleton.ui;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.Click;
-import com.googlecode.androidannotations.annotations.EActivity;
-import com.googlecode.androidannotations.annotations.ViewById;
+import android.view.*;
+import com.googlecode.androidannotations.annotations.*;
 import nz.geek.findlay.skeleton.R;
-import nz.geek.findlay.skeleton.ui.fragments.BaseFragment;
-import nz.geek.findlay.skeleton.ui.fragments.HomeFragment_;
-import nz.geek.findlay.skeleton.ui.fragments.SecondFragment;
 
 @EActivity
 public abstract class BaseActivity extends ActionBarActivity {
 
     private static final String PREFIX = BaseActivity.class.getSimpleName()+"_";
-    public static final String CONTENT_INTENT = PREFIX+"Content";
-    private ActionBarDrawerToggle drawerToggle;
-    private BaseFragment currentFragment;
+    public static final String INTENT_DRAWER_INITIALLY_OPEN = PREFIX+"DRAWER_OPEN";
 
+    private ActionBarDrawerToggle drawerToggle;
     @ViewById(R.id.main_layout)
     DrawerLayout mainLayout;
+    @ViewById(R.id.content_frame)
+    ViewGroup contentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +29,21 @@ public abstract class BaseActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(R.layout.activity_base);
+        getLayoutInflater().inflate(layoutResID, (ViewGroup) findViewById(R.id.content_frame), true);
+    }
+
+
     @AfterViews
-    void afterViews() {
+    protected void configureDrawer() {
+        if (getIntent().hasExtra(INTENT_DRAWER_INITIALLY_OPEN)) {
+            mainLayout.openDrawer(Gravity.LEFT);
+        }
+
         drawerToggle = new ActionBarDrawerToggle(this, mainLayout,
-                android.R.drawable.ic_delete, R.string.drawer_open, R.string.drawer_close) {
+                R.drawable.ic_drawer, R.string.drawer_open, R.string.app_name) {
 
             /** Called when a mainLayout has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
@@ -55,23 +60,25 @@ public abstract class BaseActivity extends ActionBarActivity {
 
         mainLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
+        closeInitiallyOpenDrawer();
+    }
 
-        if (currentFragment == null) {
-            currentFragment = getDefaultFragment();
+    @UiThread (delay = 500)
+    void closeInitiallyOpenDrawer() {
+        if (getIntent().hasExtra(INTENT_DRAWER_INITIALLY_OPEN)) {
+            getIntent().removeExtra(INTENT_DRAWER_INITIALLY_OPEN);
+            mainLayout.closeDrawer(Gravity.LEFT);
         }
-        getSupportFragmentManager().beginTransaction().add(getContentView(),currentFragment).commit();
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        currentFragment = (BaseFragment)getSupportFragmentManager().findFragmentById(savedInstanceState.getInt(CONTENT_INTENT, -1));
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CONTENT_INTENT, currentFragment.getId());
     }
 
     @Override
@@ -99,24 +106,25 @@ public abstract class BaseActivity extends ActionBarActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public  BaseFragment getDefaultFragment() {
-        return HomeFragment_.builder().build();
-    }
-    public  int getContentView() {
-        return R.id.content_frame;
-    }
-
     @Click(R.id.sampleButton)
     protected void clickSampleButton() {
-        if (!(this instanceof MainActivity)) {
-            finish();
-        }
+        startActivity(MainActivity_.class);
     }
 
     @Click(R.id.sample2Button)
     protected void clickSample2Button() {
-        if (!(currentFragment instanceof SecondFragment)) {
+        startActivity(SecondActivity_.class);
+    }
 
+    protected void startActivity(Class activity) {
+        if (!this.getClass().isAssignableFrom(activity)) {
+            final Intent intent = new Intent(this,activity);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(INTENT_DRAWER_INITIALLY_OPEN,true);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_out, android.R.anim.fade_in);
+        } else {
+            mainLayout.closeDrawers();
         }
     }
 }

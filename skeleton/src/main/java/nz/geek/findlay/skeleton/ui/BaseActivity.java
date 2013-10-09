@@ -33,6 +33,13 @@ public abstract class BaseActivity extends ActionBarActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(R.layout.activity_base);
         getLayoutInflater().inflate(layoutResID, (ViewGroup) findViewById(R.id.content_frame), true);
+
+        findViewById(R.id.content_frame).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                closeInitiallyOpenDrawer();
+            }
+        });
     }
 
 
@@ -60,10 +67,9 @@ public abstract class BaseActivity extends ActionBarActivity {
 
         mainLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        closeInitiallyOpenDrawer();
     }
 
-    @UiThread (delay = 500)
+    @UiThread
     void closeInitiallyOpenDrawer() {
         if (getIntent().hasExtra(INTENT_DRAWER_INITIALLY_OPEN)) {
             getIntent().removeExtra(INTENT_DRAWER_INITIALLY_OPEN);

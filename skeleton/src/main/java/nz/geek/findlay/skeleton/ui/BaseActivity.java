@@ -11,10 +11,13 @@ import com.googlecode.androidannotations.annotations.*;
 import nz.geek.findlay.skeleton.R;
 
 @EActivity
+@OptionsMenu(R.menu.activity_base)
 public abstract class BaseActivity extends ActionBarActivity {
 
     private static final String PREFIX = BaseActivity.class.getSimpleName()+"_";
-    public static final String INTENT_DRAWER_INITIALLY_OPEN = PREFIX+"DRAWER_OPEN";
+
+    @Extra ("BaseActivity_DrawerOpen")
+    Boolean drawerInitiallyOpen = null;
 
     private ActionBarDrawerToggle drawerToggle;
     @ViewById(R.id.main_layout)
@@ -45,7 +48,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @AfterViews
     protected void configureDrawer() {
-        if (getIntent().hasExtra(INTENT_DRAWER_INITIALLY_OPEN)) {
+        if (drawerInitiallyOpen != null && drawerInitiallyOpen) {
             mainLayout.openDrawer(Gravity.LEFT);
         }
 
@@ -54,13 +57,11 @@ public abstract class BaseActivity extends ActionBarActivity {
 
             /** Called when a mainLayout has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle("Closed");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a mainLayout has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle("Opened");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -71,8 +72,8 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @UiThread
     void closeInitiallyOpenDrawer() {
-        if (getIntent().hasExtra(INTENT_DRAWER_INITIALLY_OPEN)) {
-            getIntent().removeExtra(INTENT_DRAWER_INITIALLY_OPEN);
+        if (drawerInitiallyOpen != null && drawerInitiallyOpen) {
+            drawerInitiallyOpen = null;
             mainLayout.closeDrawer(Gravity.LEFT);
         }
     }
@@ -126,7 +127,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         if (!this.getClass().isAssignableFrom(activity)) {
             final Intent intent = new Intent(this,activity);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(INTENT_DRAWER_INITIALLY_OPEN,true);
+            drawerInitiallyOpen = true;
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_out, android.R.anim.fade_in);
         } else {

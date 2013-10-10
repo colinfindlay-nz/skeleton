@@ -129,7 +129,7 @@ public abstract class BaseActivity extends ActionBarActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             drawerInitiallyOpen = true;
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_out, android.R.anim.fade_in);
+            overridePendingTransition(R.anim.none, R.anim.none);
         } else {
             mainLayout.closeDrawers();
         }

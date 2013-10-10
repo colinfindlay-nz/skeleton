@@ -15,8 +15,9 @@ import nz.geek.findlay.skeleton.R;
 public abstract class BaseActivity extends ActionBarActivity {
 
     private static final String PREFIX = BaseActivity.class.getSimpleName()+"_";
+    private static final String DRAWER_OPEN_INTENT = "BaseActivity_DrawerOpen";
 
-    @Extra ("BaseActivity_DrawerOpen")
+    @Extra (DRAWER_OPEN_INTENT)
     Boolean drawerInitiallyOpen = null;
 
     private ActionBarDrawerToggle drawerToggle;
@@ -127,6 +128,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         if (!this.getClass().isAssignableFrom(activity)) {
             final Intent intent = new Intent(this,activity);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(DRAWER_OPEN_INTENT,Boolean.TRUE);
             drawerInitiallyOpen = true;
             startActivity(intent);
             overridePendingTransition(R.anim.none, R.anim.none);

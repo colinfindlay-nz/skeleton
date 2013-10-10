@@ -7,11 +7,21 @@ import org.acra.annotation.ReportsCrashes;
 public class Application extends android.app.Application
 {
 
+    private static Application instance;
 
     @Override
     public void onCreate() {
         //ACRA.init(this);
         super.onCreate();
+        instance = this;
+    }
+
+    public static Application getInstance() {
+        return instance;
+    }
+
+    public static String getLogTag(Class clazz) {
+        return instance.getApplicationInfo().name + "_" + clazz.getSimpleName();
     }
 
 }

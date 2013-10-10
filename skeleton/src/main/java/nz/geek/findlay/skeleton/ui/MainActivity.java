@@ -6,7 +6,7 @@ import nz.geek.findlay.skeleton.R;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity
-        extends BaseActivity {
+        extends BaseDrawerActivity {
 
 
 }

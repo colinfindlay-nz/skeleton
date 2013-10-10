@@ -15,7 +15,7 @@
             android:layout_width="240dp"
                  android:layout_height="match_parent"
                  android:orientation="vertical"
-                 android:background="#111"
+                 android:background="#444"
                  android:layout_gravity="left">
         <Button
                 android:id="@+id/sampleButton"

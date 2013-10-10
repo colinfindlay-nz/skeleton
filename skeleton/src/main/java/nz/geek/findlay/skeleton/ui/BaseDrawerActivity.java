@@ -16,6 +16,7 @@ public abstract class BaseDrawerActivity extends ActionBarActivity {
 
     private static final String PREFIX = BaseDrawerActivity.class.getSimpleName() + "_";
     private static final String DRAWER_OPEN_INTENT = "BaseActivity_DrawerOpen";
+
     @Extra(DRAWER_OPEN_INTENT)
     Boolean drawerInitiallyOpen = null;
     @ViewById(R.id.main_layout)
@@ -106,21 +107,6 @@ public abstract class BaseDrawerActivity extends ActionBarActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    @Click(R.id.sampleButton)
-    protected void clickSampleButton() {
-        startActivity(MainActivity_.class);
-    }
-
-    @Click(R.id.sample2Button)
-    protected void clickSample2Button() {
-        startActivity(SecondActivity_.class);
-    }
-
-    @Click(R.id.aboutButton)
-    protected void clickAboutButton() {
-        startActivity(AboutActivity_.class);
-    }
-
     protected void startActivity(Class activity) {
         final Intent intent = new Intent(getApplicationContext(), activity);
         // Top-Level tasks are started fresh.
@@ -136,4 +122,21 @@ public abstract class BaseDrawerActivity extends ActionBarActivity {
             mainLayout.closeDrawer(Gravity.LEFT);
         }
     }
+
+    @Click(R.id.sampleButton)
+    protected void clickSampleButton() {
+        startActivity(MainActivity_.class);
+    }
+
+    @Click(R.id.sample2Button)
+    protected void clickSample2Button() {
+        startActivity(SecondActivity_.class);
+    }
+
+    @Click(R.id.aboutButton)
+    protected void clickAboutButton() {
+        startActivity(AboutActivity_.class);
+    }
+
+
 }

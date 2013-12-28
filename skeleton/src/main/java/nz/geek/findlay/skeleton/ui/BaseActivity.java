@@ -16,9 +16,6 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     private static final String PREFIX = BaseActivity.class.getSimpleName()+"_";
 
-    @Extra ("BaseActivity_DrawerOpen")
-    Boolean drawerInitiallyOpen = null;
-
     private ActionBarDrawerToggle drawerToggle;
     @ViewById(R.id.main_layout)
     DrawerLayout mainLayout;
@@ -36,21 +33,11 @@ public abstract class BaseActivity extends ActionBarActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(R.layout.activity_base);
         getLayoutInflater().inflate(layoutResID, (ViewGroup) findViewById(R.id.content_frame), true);
-
-        findViewById(R.id.content_frame).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                closeInitiallyOpenDrawer();
-            }
-        });
     }
 
 
     @AfterViews
     protected void configureDrawer() {
-        if (drawerInitiallyOpen != null && drawerInitiallyOpen) {
-            mainLayout.openDrawer(Gravity.LEFT);
-        }
 
         drawerToggle = new ActionBarDrawerToggle(this, mainLayout,
                 R.drawable.ic_drawer, R.string.drawer_open, R.string.app_name) {
@@ -68,14 +55,6 @@ public abstract class BaseActivity extends ActionBarActivity {
 
         mainLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
-    }
-
-    @UiThread
-    void closeInitiallyOpenDrawer() {
-        if (drawerInitiallyOpen != null && drawerInitiallyOpen) {
-            drawerInitiallyOpen = null;
-            mainLayout.closeDrawer(Gravity.LEFT);
-        }
     }
 
     @Override
@@ -127,11 +106,14 @@ public abstract class BaseActivity extends ActionBarActivity {
         if (!this.getClass().isAssignableFrom(activity)) {
             final Intent intent = new Intent(this,activity);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            drawerInitiallyOpen = true;
-            startActivity(intent);
-            overridePendingTransition(R.anim.none, R.anim.none);
-        } else {
-            mainLayout.closeDrawers();
+            mainLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    startActivity(intent);
+                }
+            });
         }
+        mainLayout.closeDrawers();
     }
 }

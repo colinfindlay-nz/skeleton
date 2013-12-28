@@ -1,5 +1,11 @@
 <resources>
 
-			<style name="AppTheme" parent="@style/Theme.AppCompat.Light" />
+    <style name="Animation" />
+    <style name="Animation.None">
+        <item name="android:activityOpenEnterAnimation">@anim/none</item>
+        <item name="android:activityOpenExitAnimation">@anim/none</item>
+        <item name="android:activityCloseEnterAnimation">@anim/none</item>
+        <item name="android:activityCloseExitAnimation">@anim/none</item>
+    </style>
 
 </resources>

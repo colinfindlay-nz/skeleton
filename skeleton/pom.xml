@@ -35,14 +35,16 @@
 		<!-- Plugins -->
 		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
-		<api.platform>16</api.platform>
+		<api.platform>19</api.platform>
 
 		<!-- Dependencies -->
-		<androidannotations.version>2.7.1</androidannotations.version>
-		<android.version>4.3_r2</android.version>
-        <support-v4.version>18</support-v4.version>
-        <support-v7-appcompat.version>18</support-v7-appcompat.version>
+		<androidannotations.version>3.0.1</androidannotations.version>
+		<android.version>4.4.2_r2</android.version>
+        <support-v4.version>19.0.1</support-v4.version>
+        <support-v7-appcompat.version>19.0.1</support-v7-appcompat.version>
 		<spring-android-rest-template.version>1.0.1.RELEASE</spring-android-rest-template.version>
+        <gson-version>2.2.4</gson-version>
+        <simple-version>2.7.1</simple-version>
 		<acra.version>4.5.0</acra.version>
 	</properties>
 
@@ -54,13 +56,13 @@
 			<version>${android.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.androidannotations</groupId>
+			<groupId>org.androidannotations</groupId>
 			<artifactId>androidannotations</artifactId>
 			<version>${androidannotations.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.androidannotations</groupId>
+			<groupId>org.androidannotations</groupId>
 			<artifactId>androidannotations-api</artifactId>
 			<version>${androidannotations.version}</version>
 		</dependency>
@@ -85,6 +87,16 @@
 			<artifactId>spring-android-rest-template</artifactId>
 			<version>${spring-android-rest-template.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.simpleframework</groupId>
+            <artifactId>simple-xml</artifactId>
+            <version>${simple-version}</version>
+        </dependency>
 		<dependency>
 			<groupId>ch.acra</groupId>
 			<artifactId>acra</artifactId>
